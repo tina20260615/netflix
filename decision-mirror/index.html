@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decision Mirror — 현명한 의사결정을 돕는 거울</title>
+  <meta name="description" content="고민과 선택지를 구조화하고, 가치관 분석과 편향 체크를 통해 더 합리적인 결정을 내리세요.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo" id="logo-home">
+        <span class="logo-mirror">🔍</span> Decision Mirror
+      </a>
+      <button class="btn-reset" id="btn-reset-app" style="display: none;">처음부터 다시</button>
+    </div>
+  </header>
+
+  <!-- Step Bar Indicator (Visible during active creation steps) -->
+  <div id="step-bar" style="display: none; padding-top: 1.5rem;">
+    <div class="step-indicator">
+      <div class="step-indicator-progress" id="step-progress-line"></div>
+      <div class="step-dot active" data-step="1" title="고민 입력">1</div>
+      <div class="step-dot" data-step="2" title="장단점 비교">2</div>
+      <div class="step-dot" data-step="3" title="가치관 질문">3</div>
+    </div>
+  </div>
+
+  <main>
+    <!-- 1. LANDING SCREEN -->
+    <section id="landing-screen" class="screen active">
+      <div class="hero-visual">
+        <!-- SVG Mirror Icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="8"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="M20 12h2"></path>
+          <path d="M2 12h2"></path>
+          <path d="M5.6 5.6l1.4 1.4"></path>
+          <path d="M17 17l1.4 1.4"></path>
+          <path d="M18.4 5.6l-1.4 1.4"></path>
+          <path d="M7 17l-1.4 1.4"></path>
+        </svg>
+      </div>
+      <div class="title-section">
+        <h1>나만의 의사결정 거울</h1>
+        <p class="subtitle">결정이 어려우신가요? 마음을 들여다보고 편향을 점검하여 후회 없는 결정을 내리도록 도와드립니다.</p>
+      </div>
+      <div class="card" style="max-width: 500px; margin: 0 auto;">
+        <h3 style="margin-bottom: 1rem; text-align: center;">어떻게 작동하나요?</h3>
+        <ul style="text-align: left; margin-bottom: 2rem; padding-left: 1.25rem; color: var(--text-muted); font-size: 0.95rem;">
+          <li style="margin-bottom: 0.5rem;">선택을 고민하고 있는 질문과 핵심 대안을 입력합니다.</li>
+          <li style="margin-bottom: 0.5rem;">두 대안의 장단점을 구조적으로 열거합니다.</li>
+          <li style="margin-bottom: 0.5rem;">나의 진정한 가치관을 확인하는 간단한 진단을 진행합니다.</li>
+          <li style="margin-bottom: 0.5rem;">정량적 점수와 심리 편향 분석 리포트를 확인합니다.</li>
+        </ul>
+        <button class="btn btn-primary btn-block" id="btn-start">고민 진단하기 &rarr;</button>
+      </div>
+    </section>
+
+    <!-- 2. INPUT SCREEN (고민 입력) -->
+    <section id="input-screen" class="screen">
+      <div class="title-section">
+        <h1>어떤 고민을 하고 계신가요?</h1>
+        <p class="subtitle">구체적이고 명확한 대조군을 적을수록 더 나은 분석이 나옵니다.</p>
+      </div>
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label" for="input-title">나의 고민 주제</label>
+          <input type="text" class="form-control" id="input-title" placeholder="예: 이직을 해야 할까?">
+        </div>
+        <div class="options-grid">
+          <div class="form-group">
+            <label class="form-label" for="input-option-a">선택지 A (현실형 / 기본)</label>
+            <input type="text" class="form-control" id="input-option-a" placeholder="예: 현재 회사에 머물기 또는 대기업">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-option-b">선택지 B (도전형 / 대안)</label>
+            <input type="text" class="form-control" id="input-option-b" placeholder="예: 스타트업으로 이직하기">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btn-input-back">이전</button>
+          <button class="btn btn-primary" style="flex-grow: 1;" id="btn-input-next">다음 단계로</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PROS & CONS SCREEN (장단점 입력) -->
+    <section id="proscons-screen" class="screen">
+      <div class="title-section">
+        <h1>각 선택지의 장단점은 무엇인가요?</h1>
+        <p class="subtitle">각 선택지당 최소 1개 이상의 장점과 단점을 입력해주세요.</p>
+      </div>
+
+      <div class="options-grid">
+        <!-- Option A Column -->
+        <div class="option-column">
+          <div class="card" style="flex-grow: 1;">
+            <span class="option-header-badge option-a-badge" id="badge-option-a">선택지 A</span>
+            <h2 id="header-option-a" style="margin-bottom: 1.5rem;">선택지 A</h2>
+            
+            <div class="form-group">
+              <label class="form-label">👍 장점 (Pros)</label>
+              <div class="dynamic-list" id="list-pros-a">
+                <!-- Javascript builds items here -->
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-add-pro-a">+ 장점 추가</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+              <label class="form-label">👎 단점 (Cons)</label>
+              <div class="dynamic-list" id="list-cons-a">
+                <!-- Javascript builds items here -->
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-add-con-a">+ 단점 추가</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Option B Column -->
+        <div class="option-column">
+          <div class="card" style="flex-grow: 1;">
+            <span class="option-header-badge option-b-badge" id="badge-option-b">선택지 B</span>
+            <h2 id="header-option-b" style="margin-bottom: 1.5rem;">선택지 B</h2>
+
+            <div class="form-group">
+              <label class="form-label">👍 장점 (Pros)</label>
+              <div class="dynamic-list" id="list-pros-b">
+                <!-- Javascript builds items here -->
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-add-pro-b">+ 장점 추가</button>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+              <label class="form-label">👎 단점 (Cons)</label>
+              <div class="dynamic-list" id="list-cons-b">
+                <!-- Javascript builds items here -->
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btn-add-con-b">+ 단점 추가</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 1.5rem;">
+        <div class="btn-group" style="margin-top: 0;">
+          <button class="btn btn-secondary" id="btn-proscons-back">이전</button>
+          <button class="btn btn-primary" style="flex-grow: 1;" id="btn-proscons-next">가치관 진단 진행</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. QUIZ SCREEN (가치관 진단) -->
+    <section id="quiz-screen" class="screen">
+      <div class="title-section">
+        <h1>의사결정 가치관 측정</h1>
+        <p class="subtitle">각 질문에 대한 솔직한 생각을 응답해주세요. 무의식적인 편향을 체크합니다.</p>
+      </div>
+      <div class="card">
+        <div id="quiz-container">
+          <!-- JS dynamic generation -->
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" id="btn-quiz-back">이전</button>
+          <button class="btn btn-primary" style="flex-grow: 1;" id="btn-quiz-submit">분석 시작 &rarr;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAKE LOADING SCREEN -->
+    <section id="loading-screen" class="screen">
+      <div class="loader-container">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-message">당신의 고민을 분석 중...</div>
+      </div>
+    </section>
+
+    <!-- 5. RESULT SCREEN (결과 리포트) -->
+    <section id="result-screen" class="screen">
+      <div class="title-section">
+        <span style="font-weight: 700; color: var(--primary); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;">ANALYSIS REPORT</span>
+        <h1 id="result-topic" style="margin-top: 0.5rem;">이직 고민에 대한 분석 결과</h1>
+        <p class="subtitle">작성된 가치관 및 장단점 분석에 따른 의사결정 추천 지표입니다.</p>
+      </div>
+
+      <div class="result-grid">
+        <!-- Left Side: Scores and Recommendation -->
+        <div class="score-cards-container">
+          <!-- Card for Option A -->
+          <div class="score-card" id="card-result-a">
+            <div class="score-title-row">
+              <span class="score-name" id="result-name-a">대기업 (A)</span>
+              <span class="score-number" id="result-score-a">78점</span>
+            </div>
+            <div class="score-bar-bg">
+              <div class="score-bar-fill" id="bar-result-a"></div>
+            </div>
+          </div>
+
+          <!-- Card for Option B -->
+          <div class="score-card" id="card-result-b">
+            <div class="score-title-row">
+              <span class="score-name" id="result-name-b">스타트업 (B)</span>
+              <span class="score-number" id="result-score-b">64점</span>
+            </div>
+            <div class="score-bar-bg">
+              <div class="score-bar-fill" id="bar-result-b"></div>
+            </div>
+          </div>
+
+          <!-- Bias Analysis Badges -->
+          <div class="card" style="padding: 1.25rem 1.5rem; margin-bottom: 0;">
+            <h3 style="margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+              ⚠️ 감지된 의사결정 편향 (Cognitive Biases)
+            </h3>
+            <div class="bias-container" id="result-bias-container">
+              <!-- JS builds badges/advisories here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Radar Chart -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: center; margin-bottom: 0;">
+          <h3 style="text-align: center; margin-bottom: 1rem;">가치관 & 심리 균형 차트</h3>
+          <div class="chart-container">
+            <canvas id="radarChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recommendation Card -->
+      <div class="card recommendation-card" style="margin-top: 1.5rem;">
+        <h3 id="recommendation-title" style="color: var(--primary); margin-bottom: 0.5rem;">가치관 매칭 결과</h3>
+        <p class="recommendation-text" id="recommendation-desc">
+          로딩 중...
+        </p>
+      </div>
+
+      <!-- Restart / Share -->
+      <div style="text-align: center; margin-top: 2.5rem;">
+        <button class="btn btn-secondary" id="btn-restart-final">새로운 의사결정 시작하기</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Decision Mirror. All rights reserved. Your data stays completely on your computer.</p>
+  </footer>
+
+  <!-- CDN scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Application Logic (Loaded in order to avoid module import/CORS limitations on local file:// protocol) -->
+  <script src="js/scoring.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/recommendation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
