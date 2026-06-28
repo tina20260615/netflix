@@ -1,2 +1,1 @@
-# netflix
-netflix IR analyzing
+#decision support program
